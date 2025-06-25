@@ -2,28 +2,34 @@
 
 A self-hosted WireGuard VPN combined with AdGuard Home for ad-blocking on all connected devices. Noodling around.
 
-                   +---------------------+
-                   |      Internet       |
-                   +----------+----------+
-                              |
-                              | Public IP (VPS)
-                        +-----v-----+
-                        |   VPS     |
-                        |  (Ubuntu) |
-                        |           |
-                +-------+-----------+-------+
-                | WireGuard VPN Server      |
-                | AdGuard Home DNS Server   |
-                +---------------------------+
-                          |
-         +----------------+----------------+
-         |                                 |
-+--------v-------+                 +-------v-------+
-| Client Device  |                 | Client Device  |
-| (Laptop/Phone) |                 | (Laptop/Phone) |
-+----------------+                 +---------------+
-   (VPN Tunnel)                       (VPN Tunnel)
-
+```
+       +-------------+
+       |  Internet   |
+       +------+------+ 
+              |
+       Public IP (VPS)
+              |
+         +----v----+
+         |   VPS   |
+         | Ubuntu  |
+         +----+----+
+              |
+   +----------+-----------+
+   | WireGuard VPN Server |
+   |  AdGuard Home DNS    |
+   +----------+-----------+
+              |
+      +-------+-------+
+      |               |
+  +---v---+       +---v---+
+  | Client|       | Client|
+  |Device |       |Device |
+  |(Laptop|       |(Phone)|
+  | or    |       | or    |
+  |Phone) |       |Laptop)|
+  +-------+       +-------+
+(VPN Tunnel)     (VPN Tunnel)
+```
 
 ## So Far...
 - Provisioned VPS on Hetzner CX21, Ubuntu 24.04
@@ -33,14 +39,14 @@ A self-hosted WireGuard VPN combined with AdGuard Home for ad-blocking on all co
 - Set up VPN client config for easy connection from devices
 
 # How to Use (Mostly Reminders for Me)
-1. Connect as a VPN client
+#### 1. Connect as a VPN client
 I imported my WireGuard client config into the desktop UI to set up the tunnel.
 
-2. Set up AdGuard Home
+#### 2. Set up AdGuard Home
 After getting it up and running, go to `http://vps_ip:3000` to manage DNS filtering, blocklists, and settings.
 
 ## To-Do
-- Write a bash script to install & configure WireGuard, AdGuard Home & UFW firewall
+- Set up DNS filtering rules, add blocklists, config safe client access
 - Add monitoring & alerting with Prometheus and Grafana for service uptime & VPN usage
 - Configure fail2ban, tighten ufw, set up logging, etc.
 - Maybe containerize AGH and WG for easier upgrades/isolation
