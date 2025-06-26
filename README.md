@@ -1,6 +1,6 @@
-# VPN Ad Blocker Project
+# VPN Ad Blocker
 
-A self-hosted WireGuard VPN combined with AdGuard Home for ad-blocking on all connected devices. Noodling around.
+A self-hosted WireGuard VPN combined with AdGuard Home for ad-blocking on all connected devices.
 
 ```
        +-------------+
@@ -38,20 +38,39 @@ A self-hosted WireGuard VPN combined with AdGuard Home for ad-blocking on all co
 - Configured UFW to secure server and allow necessary traffic
 - Set up VPN client config for easy connection from devices
 
-# How to Use (Mostly Reminders for Me)
-#### 1. Connect as a VPN client
-I imported my WireGuard client config into the desktop UI to set up the tunnel.
+## Scripts
+This repo includes helper scripts to speed up provisioning and client setup.
 
-#### 2. Set up AdGuard Home
-After getting it up and running, go to `http://vps_ip:3000` to manage DNS filtering, blocklists, and settings.
+### `setup.sh`
 
-## To-Do
-- Set up DNS filtering rules, add blocklists, config safe client access
-- Add monitoring & alerting with Prometheus and Grafana for service uptime & VPN usage
-- Configure fail2ban, tighten ufw, set up logging, etc.
-- Maybe containerize AGH and WG for easier upgrades/isolation
-- Better instructions for adding new VPN clients and troubleshooting
+Installs and configures WireGuard and AdGuard Home.  
+Run this on your VPS:
 
-## Notes
-- Handled port conflicts between WG, AGH, and system services
-- AdGuard Home's config file can get overwritten by the UI, so managing config through the UI avoids losing manual edits
+```bash
+curl -O https://raw.githubusercontent.com/navillasa/vpn-ad-blocker/main/setup.sh
+chmod +x setup.sh
+sudo ./setup.sh
+```
+
+### `add-client.sh`
+
+Generates a new WireGuard config for an additional client device (e.g. laptop or phone).
+
+If `qrencode` is installed, it also prints a QR code to scan from the WireGuard mobile app.
+
+```bash
+chmod +x add-client.sh
+sudo ./add-client.sh clientname
+```
+The config will be in ./clients/clientname.conf, and you can scan the QR code directly into the WireGuard mobile app:
+
+1. Open the WireGuard app
+2. Tap +
+3. Choose "Scan from QR code"
+
+## Takeaways
+- Refreshed knowledge of Linux server security, ufw configuration, and SSH hardening
+- Practiced setting up secure VPN access with WireGuard
+- Learned to manage DNS-level ad blocking using AdGuard Home
+- Practiced troubleshooting networking and port conflicts
+- Remembered how important it is to lock things down early 😅
